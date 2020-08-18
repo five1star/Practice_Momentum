@@ -3,13 +3,25 @@ const toDoInput = toDoForm.querySelector('input');
 const toDoList = document.querySelector('.js-toDoList');
 
 const TODOS_LS = 'toDos';
-const toDos= []; 
-console.log(toDos);
+let toDos= []; 
+
+
+function deleteToDo(event){
+    const btn = event.target;
+    const li = btn.parentNode;
+    toDoList.removeChild(li);
+    const cleanToDos = toDos.filter(function(toDo){
+        return toDo.id !== parseInt(li.id);
+    });
+    toDos = cleanToDos;
+    saveToDos();
+//delete child element mdn
+//parseInt( string =>number)
+}
 
 function saveToDos(){
     localStorage.setItem(TODOS_LS, JSON.stringify(toDos));
 }
-
 
 function paintToDo(text){
     const li = document.createElement('li');
@@ -18,6 +30,8 @@ function paintToDo(text){
     const newId = toDos.length+1;
     
     delBtn.textContent = '지우기';
+    delBtn.addEventListener('click',deleteToDo);
+
     span.textContent = text;
 
     li.append(span,delBtn);
@@ -43,8 +57,6 @@ function handleSubmit(event){
 function something(toDo){
     paintToDo(toDo.text);
 }
-
-
 
 function loadToDos(){
     const loadedToDos = localStorage.getItem(TODOS_LS);
